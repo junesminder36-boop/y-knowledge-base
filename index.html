@@ -64,12 +64,10 @@
         .page.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* =========================================
-           ✨ 优化：文章列表强制100%全宽对齐
-           ========================================= */
+        /* 文章列表布局对齐 */
         .page-header { display: flex; justify-content: flex-start; align-items: center; margin-bottom: 25px; }
         .page-header h2 { margin: 0; color: var(--primary-color); }
-        .page-header .btn { margin-left: auto; } /* 让按钮靠右 */
+        .page-header .btn { margin-left: auto; } 
         
         .articles-list { display: flex; flex-direction: column; gap: 20px; width: 100%; }
         .article-card-item { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; gap: 20px; align-items: flex-start; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; width: 100%;}
@@ -341,25 +339,27 @@
             await fetchArticles();
         });
 
-        // ✨ 优化：加入防缓存机制与错误提示
+        // ✨ 修复：去掉了非法的 _t 参数，改用更安全的 Headers 防缓存机制
         async function fetchArticles() {
             try {
-                // 在网址末尾加了一个时间戳，强制手机抛弃旧缓存拉取最新数据
-                const urlWithCacheBuster = `${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc&_t=${new Date().getTime()}`;
-                const res = await fetch(urlWithCacheBuster, { headers });
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { 
+                    headers: {
+                        ...headers,
+                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                    }
+                });
                 
-                if (!res.ok) throw new Error('网络请求被拦截或拒绝');
+                if (!res.ok) throw new Error(`数据库拒绝请求 (状态码: ${res.status})，请检查底部的 URL 和 KEY。`);
                 
                 allArticlesData = await res.json();
                 renderList(allArticlesData);
             } catch (err) { 
                 console.error('拉取失败:', err); 
-                // 如果拉取失败，明确告诉用户
                 document.getElementById('home-articles').innerHTML = `
                     <div style="text-align: center; color: #DC3545; padding: 40px; background: #fff; border-radius: 8px;">
                         <h3 style="margin-bottom: 10px;">⚠️ 数据加载失败</h3>
-                        <p>这可能是由于您的手机网络拦截，或旧版本缓存导致。</p>
-                        <p style="font-size: 13px; color: #999; margin-top: 10px;">技术报错信息: ${err.message}</p>
+                        <p>请检查代码最底部的 SUPABASE_URL 和 SUPABASE_KEY 是否填写正确，且不要多删掉单引号。</p>
+                        <p style="font-size: 13px; color: #999; margin-top: 10px;">技术报错: ${err.message}</p>
                     </div>`;
             }
         }
