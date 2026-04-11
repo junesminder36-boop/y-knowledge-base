@@ -7,14 +7,17 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4C64FE;
-            --primary-dark: #3A4FD9;
+            /* --- 优码科技专属品牌色 --- */
+            --primary-color: #4C64FE; /* 深色主色 */
+            --primary-light: #4C94FE; /* 浅色主色 */
+            --primary-dark: #3a4fd9;  /* 按钮悬停加深色 */
+            
             --secondary-color: #F8F9FA;
             --text-color: #333333;
             --text-light: #666666;
             --border-color: #E9ECEF;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            --radius: 8px;
+            --shadow: 0 4px 20px rgba(76, 100, 254, 0.08); /* 阴影也带上品牌色温 */
+            --radius: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,56 +25,86 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* 头部和导航 */
-        header { background: white; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
-        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .logo-icon { width: 40px; height: 40px; background: var(--primary-color); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; }
-        .logo-text h1 { font-size: 24px; color: var(--primary-color); font-weight: 600; }
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .logo { text-decoration: none; display: flex; align-items: center; gap: 10px;}
+        /* 增加一个品牌色的小色块 Logo 占位 */
+        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-light), var(--primary-color)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;}
+        .logo-text h1 { font-size: 22px; color: var(--primary-color); font-weight: bold; margin-bottom: 2px;}
+        .logo-text span { font-size: 12px; color: var(--text-light); }
+        
         nav ul { display: flex; gap: 30px; list-style: none; }
-        nav a { text-decoration: none; color: var(--text-color); font-weight: 500; padding: 8px 16px; border-radius: var(--radius); }
-        nav a.active { color: var(--primary-color); background-color: rgba(76, 100, 254, 0.1); }
+        nav a { text-decoration: none; color: var(--text-color); font-weight: 500; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;}
+        nav a:hover, nav a.active { color: var(--primary-color); background-color: rgba(76, 148, 254, 0.1); } /* 使用浅色调配背景 */
         .header-right { display: flex; align-items: center; gap: 20px; }
-        .btn { padding: 8px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-weight: 500; }
+        
+        .btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(76, 100, 254, 0.2); }
         .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
         .btn-secondary { background: var(--secondary-color); color: var(--text-color); border: 1px solid var(--border-color); }
-        .btn-danger { background: #DC3545; color: white; }
+        .btn-danger { background: #DC3545; color: white; box-shadow: none;}
 
-        /* 主体布局 */
-        main { min-height: 80vh; padding: 40px 0; }
+        /* 首页品牌色头图 */
+        .hero { 
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%); 
+            color: white; 
+            padding: 80px 20px; 
+            text-align: center; 
+        }
+        .hero h1 { font-size: 42px; margin-bottom: 20px; font-weight: bold; letter-spacing: 2px;}
+        .hero p { font-size: 18px; opacity: 0.9; margin-bottom: 40px; }
+        .search-bar { max-width: 600px; margin: 0 auto; display: flex; background: white; border-radius: 30px; padding: 6px; box-shadow: 0 10px 25px rgba(76, 100, 254, 0.15); }
+        .search-bar input { flex: 1; border: none; padding: 12px 25px; border-radius: 30px; outline: none; font-size: 16px; color: var(--text-color); }
+        .search-bar button { background: var(--primary-color); color: white; border: none; padding: 10px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; transition: background 0.2s;}
+        .search-bar button:hover { background: var(--primary-dark); }
+
+        /* 分类卡片 */
+        .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: -40px auto 40px; padding: 0 20px; position: relative; z-index: 10;}
+        .category-card { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: left; transition: transform 0.2s;}
+        .category-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(76, 100, 254, 0.12); }
+        .cat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; color:white;}
+        .category-card h3 { margin-bottom: 10px; font-size: 18px; color: var(--primary-color);}
+        .category-card p { color: var(--text-light); font-size: 14px; line-height: 1.5;}
+
+        /* 主体内容 */
+        main { min-height: 60vh; padding-bottom: 60px;}
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 文章卡片 (增加封面图布局) */
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        /* 文章列表 */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .articles-list { display: grid; gap: 20px; }
-        .article-card-item { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; gap: 20px; align-items: flex-start; cursor: pointer; transition: transform 0.2s;}
-        .article-card-item:hover { transform: translateY(-3px); }
-        .article-cover { width: 160px; height: 110px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--border-color);}
+        .article-card-item { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; gap: 20px; align-items: flex-start; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;}
+        .article-card-item:hover { transform: translateY(-3px); border-color: var(--primary-light); box-shadow: 0 5px 15px rgba(76,148,254,0.15);}
+        .article-cover { width: 180px; height: 120px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--border-color);}
         .article-content { flex: 1; }
-        .article-content h3 { font-size: 18px; margin-bottom: 8px; color: var(--primary-dark);}
-        .article-meta { display: flex; gap: 15px; color: var(--text-light); font-size: 13px; margin-bottom: 8px; }
-        .article-summary { color: var(--text-color); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .article-tag { display: inline-block; padding: 3px 10px; background: rgba(76,100,254,0.1); color: var(--primary-color); border-radius: 20px; font-size: 12px; margin-top: 10px;}
+        .article-content h3 { font-size: 18px; margin-bottom: 10px; color: var(--text-color); transition: color 0.2s;}
+        .article-card-item:hover .article-content h3 { color: var(--primary-color); }
+        .article-meta { display: flex; gap: 15px; color: var(--text-light); font-size: 13px; margin-bottom: 10px; }
+        .article-summary { color: var(--text-light); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .article-tag { display: inline-block; padding: 4px 12px; background: rgba(76,148,254,0.1); color: var(--primary-color); border-radius: 20px; font-size: 12px; margin-top: 12px;}
 
         /* 文章详情 */
-        .article-detail { background: white; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); }
+        .article-detail { background: white; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); margin-top: 40px;}
         .article-detail-cover { width: 100%; max-height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 30px; }
         .article-header h2 { font-size: 32px; margin-bottom: 15px; }
         .article-header .meta { display: flex; gap: 20px; color: var(--text-light); margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px;}
         
         /* 表单与富文本 */
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-color); }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; outline: none;}
+        .form-control:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(76,148,254,0.1); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         #editor-container { height: 500px; background: white; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-size: 16px;}
         .ql-toolbar { border-top-left-radius: 6px; border-top-right-radius: 6px; background: #f8f9fa;}
         
         /* 模态框 */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px);}
         .modal.active { display: flex; }
-        .modal-content { background: white; padding: 30px; border-radius: var(--radius); width: 400px; }
+        .modal-content { background: white; padding: 40px; border-radius: var(--radius); width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);}
     </style>
 </head>
 <body>
@@ -79,52 +112,86 @@
         <div class="container header-content">
             <a href="#" class="logo" onclick="switchPage('home')">
                 <div class="logo-icon">UR</div>
-                <div class="logo-text"><h1>优码城市智库</h1></div>
+                <div class="logo-text">
+                    <h1>优码城市更新智库</h1>
+                    <span>政策解读 · 行业案例 · 解决方案</span>
+                </div>
             </a>
             <nav>
-                <ul>
-                    <li><a href="#" onclick="switchPage('home')" class="nav-link active" data-page="home">全部文章</a></li>
+                <ul id="nav-menu">
+                    <li><a href="#" onclick="filterAndSwitch('home')" class="nav-link active" data-page="home">首页</a></li>
+                    <li><a href="#" onclick="filterAndSwitch('政策解读')" class="nav-link" data-page="政策解读">政策解读</a></li>
+                    <li><a href="#" onclick="filterAndSwitch('行业案例')" class="nav-link" data-page="行业案例">行业案例</a></li>
+                    <li><a href="#" onclick="filterAndSwitch('数字化解决方案')" class="nav-link" data-page="数字化解决方案">数字化解决方案</a></li>
                 </ul>
             </nav>
             <div class="header-right">
-                <div id="login-button"><button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理员登录</button></div>
+                <div id="login-button"><button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理</button></div>
             </div>
         </div>
     </header>
 
+    <div id="hero-section" style="display: block;">
+        <div class="hero">
+            <h1>优码城市更新知识库</h1>
+            <p>汇聚最新政策解读、行业最佳实践案例、数字化解决方案，助力城市更新高质量发展</p>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="搜索政策、案例、解决方案..." onkeypress="if(event.keyCode==13) doSearch()">
+                <button onclick="doSearch()">搜索</button>
+            </div>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card" style="cursor: pointer;" onclick="filterAndSwitch('政策解读')">
+                <div class="cat-icon" style="background: var(--primary-color);">📋</div>
+                <h3>政策解读</h3>
+                <p>解读城市更新相关政策文件，把握政策导向，了解申报要求。</p>
+            </div>
+            <div class="category-card" style="cursor: pointer;" onclick="filterAndSwitch('行业案例')">
+                <div class="cat-icon" style="background: linear-gradient(135deg, var(--primary-light), var(--primary-color));">🏗️</div>
+                <h3>行业案例</h3>
+                <p>分享国内外城市更新成功案例，学习实践经验与落地方法。</p>
+            </div>
+            <div class="category-card" style="cursor: pointer;" onclick="filterAndSwitch('数字化解决方案')">
+                <div class="cat-icon" style="background: var(--primary-light);">💡</div>
+                <h3>数字化解决方案</h3>
+                <p>探索数字技术在城市更新中的应用，提升整体运营管理效率。</p>
+            </div>
+        </div>
+    </div>
+
     <main class="container">
         <div id="home-page" class="page active">
-            <div class="page-header"><h2>最新发布</h2></div>
+            <div class="page-header"><h2 id="list-title" style="color: var(--primary-color);">最新发布</h2></div>
             <div class="articles-list" id="home-articles">加载中...</div>
         </div>
 
         <div id="article-detail-page" class="page">
-            <button class="btn btn-secondary" onclick="switchPage('home')" style="margin-bottom: 20px;">← 返回列表</button>
+            <button class="btn btn-secondary" onclick="filterAndSwitch('home')" style="margin-bottom: 20px;">← 返回</button>
             <div class="article-detail" id="article-detail-content"></div>
         </div>
 
-        <div id="admin-page" class="page">
+        <div id="admin-page" class="page" style="margin-top: 40px;">
             <div class="page-header">
-                <h2>后台管理控制台</h2>
-                <button class="btn btn-primary" onclick="showAddForm()">+ 发布精美文章</button>
+                <h2 style="color: var(--primary-color);">后台管理控制台</h2>
+                <button class="btn btn-primary" onclick="showAddForm()">+ 发布新文章</button>
             </div>
             
-            <div id="article-form" style="display: none; background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color);">✍️ 编辑新内容</h3>
+            <div id="article-form" style="display: none; background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-color);">
+                <h3 id="form-title-text" style="margin-bottom: 20px; color: var(--primary-color);">✍️ 编辑新内容</h3>
                 <form onsubmit="saveArticle(event)">
                     <div class="form-row">
                         <div class="form-group"><label>文章标题</label><input type="text" class="form-control" id="form-title" required></div>
                         <div class="form-group">
-                            <label>设置封面图 (可选, 推荐 16:9)</label>
+                            <label>设置封面图 (不选则保留原图/默认图)</label>
                             <input type="file" class="form-control" id="form-cover" accept="image/png, image/jpeg, image/gif">
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>文章分类</label>
+                        <div class="form-group"><label>文章分类 (对应首页三大模块)</label>
                             <select class="form-control" id="form-category">
                                 <option value="政策解读">政策解读</option>
                                 <option value="行业案例">行业案例</option>
-                                <option value="数字化方案">数字化方案</option>
+                                <option value="数字化解决方案">数字化解决方案</option>
                             </select>
                         </div>
                         <div class="form-group"><label>作者 / 来源</label><input type="text" class="form-control" id="form-author" value="优码科技"></div>
@@ -143,17 +210,17 @@
                 </form>
             </div>
             
-            <h3>已发布文章管理</h3>
-            <div class="articles-list" id="admin-articles" style="margin-top: 20px;"></div>
+            <h3 style="margin-bottom: 20px; color: var(--primary-color);">已发布文章管理</h3>
+            <div class="articles-list" id="admin-articles"></div>
         </div>
     </main>
 
     <div id="login-modal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px; text-align: center;">管理员通行证</h2>
+            <h2 style="margin-bottom: 20px; text-align: center; color: var(--primary-color);">管理员通行证</h2>
             <div class="form-group"><label>账号</label><input type="text" class="form-control" id="login-username" placeholder="请输入 admin"></div>
             <div class="form-group"><label>密码</label><input type="password" class="form-control" id="login-password" placeholder="请输入 123456"></div>
-            <button class="btn btn-primary" onclick="login()" style="width: 100%; margin-top: 10px;">登录</button>
+            <button class="btn btn-primary" onclick="login()" style="width: 100%; margin-top: 15px; padding: 10px;">安全登录</button>
         </div>
     </div>
 
@@ -167,22 +234,23 @@
         const SUPABASE_KEY = 'sb_publishable_nCrNvfF6tpmZ16QqUQxFVA_t9kNjwar';
         
         const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
-        let quillEditor; // 富文本编辑器实例
+        
+        let quillEditor; 
+        let currentEditId = null; 
+        let allArticlesData = [];
 
-        // 页面加载完毕初始化
         document.addEventListener('DOMContentLoaded', async () => {
-            // 初始化 Quill 富文本编辑器
             quillEditor = new Quill('#editor-container', {
                 theme: 'snow',
-                placeholder: '请在这里开始你的专业排版...（你可以选中文字加粗，或者直接粘贴图片进来）',
+                placeholder: '请在这里开始你的专业排版...',
                 modules: {
                     toolbar: [
-                        [{ 'header': [1, 2, 3, false] }], // 标题大小
-                        ['bold', 'italic', 'underline'],  // 加粗、斜体、下划线
-                        [{ 'color': [] }, { 'background': [] }], // 字体颜色、背景色
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // 列表
-                        ['link', 'image', 'video'], // 链接、图片、视频
-                        ['clean'] // 清除格式
+                        [{ 'header': [1, 2, 3, false] }], 
+                        ['bold', 'italic', 'underline'],  
+                        [{ 'color': [] }, { 'background': [] }], 
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
+                        ['link', 'image', 'video'], 
+                        ['clean'] 
                     ]
                 }
             });
@@ -191,16 +259,14 @@
             await fetchArticles();
         });
 
-        // 1. 获取文章数据
         async function fetchArticles() {
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { headers });
-                const articles = await res.json();
-                renderList(articles);
+                allArticlesData = await res.json();
+                renderList(allArticlesData);
             } catch (err) { console.error('拉取失败:', err); }
         }
 
-        // 2. 渲染文章列表
         function renderList(articles) {
             const html = articles.map(a => `
                 <div class="article-card-item" onclick="viewArticle(${a.id}, '${escapeHTML(a.title)}')">
@@ -213,18 +279,45 @@
                     </div>
                 </div>
             `).join('');
-            document.getElementById('home-articles').innerHTML = html || '<p>暂无文章</p>';
+            document.getElementById('home-articles').innerHTML = html || '<p style="color:#999; padding:20px;">暂无相关文章</p>';
             
-            // 渲染后台管理列表
-            document.getElementById('admin-articles').innerHTML = articles.map(a => `
-                <div class="article-card-item" style="align-items: center;">
-                    <div style="flex:1"><b>${a.title}</b> (${a.date})</div>
+            document.getElementById('admin-articles').innerHTML = allArticlesData.map(a => `
+                <div class="article-card-item" style="align-items: center; padding: 15px;">
+                    <div style="flex:1"><b>${a.title}</b> <span style="color:#999; font-size:12px; margin-left:10px;">${a.date}</span></div>
+                    <button class="btn btn-secondary" style="margin-right: 10px;" onclick="openEditForm(${a.id})">✏️ 修改</button>
                     <button class="btn btn-danger" onclick="deleteArticle(${a.id})">删除</button>
                 </div>
             `).join('');
         }
 
-        // 3. 发布/保存文章 (包含上传封面图逻辑)
+        function filterAndSwitch(category) {
+            document.getElementById('search-input').value = ''; 
+            if (category === 'home') {
+                document.getElementById('list-title').textContent = '最新发布';
+                renderList(allArticlesData);
+            } else {
+                document.getElementById('list-title').textContent = `分类：${category}`;
+                const filtered = allArticlesData.filter(a => a.category === category);
+                renderList(filtered);
+            }
+            switchPage('home', category);
+        }
+
+        function doSearch() {
+            const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+            if (!keyword) {
+                filterAndSwitch('home');
+                return;
+            }
+            document.getElementById('list-title').textContent = `搜索结果：${keyword}`;
+            const filtered = allArticlesData.filter(a => 
+                a.title.toLowerCase().includes(keyword) || 
+                (a.summary && a.summary.toLowerCase().includes(keyword))
+            );
+            renderList(filtered);
+            switchPage('home', 'home'); 
+        }
+
         async function saveArticle(event) {
             event.preventDefault();
             const saveBtn = document.getElementById('save-btn');
@@ -234,98 +327,121 @@
             const fileInput = document.getElementById('form-cover');
             let uploadedCoverUrl = null;
 
-            // 如果选择了封面图，先上传到 Supabase Storage
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${Date.now()}_cover.${fileExt}`; // 生成唯一文件名
-                
+                const fileName = `${Date.now()}_cover.${file.name.split('.').pop()}`; 
                 try {
                     const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${fileName}`, {
                         method: 'POST',
                         headers: { ...headers, 'Content-Type': file.type },
                         body: file
                     });
-                    if (uploadRes.ok) {
-                        // 拼接公网可访问的图片地址
-                        uploadedCoverUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
-                    } else {
-                        alert('封面图上传失败！但文章正文会继续保存。');
-                    }
+                    if (uploadRes.ok) uploadedCoverUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
                 } catch (e) { console.error('图片上传网络错误', e); }
             }
 
-            // 获取富文本里的所有带排版的 HTML 内容！
             const richContentHTML = quillEditor.root.innerHTML;
-
             const articleData = {
                 title: document.getElementById('form-title').value,
                 summary: document.getElementById('form-summary').value,
                 category: document.getElementById('form-category').value,
                 author: document.getElementById('form-author').value,
-                content: richContentHTML, // 存入带排版的 HTML
-                cover_image: uploadedCoverUrl, // 存入云端图片链接
+                content: richContentHTML,
                 date: new Date().toISOString().split('T')[0]
             };
+            
+            if (uploadedCoverUrl) articleData.cover_image = uploadedCoverUrl;
+
+            const isEditing = currentEditId !== null;
+            const url = isEditing ? `${SUPABASE_URL}/rest/v1/articles?id=eq.${currentEditId}` : `${SUPABASE_URL}/rest/v1/articles`;
 
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles`, {
-                    method: 'POST',
+                const res = await fetch(url, {
+                    method: isEditing ? 'PATCH' : 'POST',
                     headers: { ...headers, 'Content-Type': 'application/json' },
                     body: JSON.stringify(articleData)
                 });
                 
                 if (res.ok) {
-                    alert('🎉 文章发布成功！');
+                    alert(isEditing ? '🎉 文章修改成功！' : '🎉 文章发布成功！');
                     document.getElementById('article-form').style.display = 'none';
-                    await fetchArticles(); // 刷新列表
+                    await fetchArticles(); 
                 }
-            } catch (err) { alert('发布失败请检查网络'); }
+            } catch (err) { alert('操作失败请检查网络'); }
             
             saveBtn.textContent = '🚀 确认发布到官网';
             saveBtn.disabled = false;
         }
 
-        // 4. 查看文章详情
-        async function viewArticle(id, title) {
-            try {
-                // 单独去数据库拉取这篇文章的完整内容
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, { headers });
-                const data = await res.json();
-                if (data.length > 0) {
-                    const a = data[0];
-                    const coverHtml = a.cover_image ? `<img src="${a.cover_image}" class="article-detail-cover">` : '';
-                    
-                    document.getElementById('article-detail-content').innerHTML = `
-                        <div class="article-header">
-                            <h2>${a.title}</h2>
-                            <div class="meta"><span>${a.author}</span> <span>${a.date}</span> <span>来源: ${a.category}</span></div>
-                        </div>
-                        ${coverHtml}
-                        <div class="ql-editor" style="padding: 0; font-size: 16px;">${a.content}</div>
-                    `;
-                    switchPage('article-detail');
-                }
-            } catch (err) { console.error(err); }
+        function openEditForm(id) {
+            const a = allArticlesData.find(item => item.id === id);
+            if (a) {
+                currentEditId = id; 
+                document.getElementById('form-title').value = a.title;
+                document.getElementById('form-category').value = a.category;
+                document.getElementById('form-author').value = a.author;
+                document.getElementById('form-summary').value = a.summary;
+                document.getElementById('form-cover').value = ''; 
+                quillEditor.root.innerHTML = a.content;
+
+                document.getElementById('form-title-text').textContent = '✏️ 修改文章';
+                document.getElementById('save-btn').textContent = '💾 保存修改';
+                document.getElementById('article-form').style.display = 'block';
+                document.getElementById('article-form').scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        // 5. 删除文章
+        async function viewArticle(id, title) {
+            const a = allArticlesData.find(item => item.id === id);
+            if(a) {
+                const coverHtml = a.cover_image ? `<img src="${a.cover_image}" class="article-detail-cover">` : '';
+                document.getElementById('article-detail-content').innerHTML = `
+                    <div class="article-header">
+                        <h2 style="color: var(--primary-color);">${a.title}</h2>
+                        <div class="meta"><span>${a.author}</span> <span>${a.date}</span> <span>来源: ${a.category}</span></div>
+                    </div>
+                    ${coverHtml}
+                    <div class="ql-editor" style="padding: 0; font-size: 16px;">${a.content}</div>
+                `;
+                switchPage('article-detail', null); 
+            }
+        }
+
         async function deleteArticle(id) {
             if(!confirm('确定永久删除吗？')) return;
             await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, { method: 'DELETE', headers });
             fetchArticles();
         }
 
-        // 辅助功能：页面切换与登录
-        function switchPage(pageId) {
+        function switchPage(pageId, navCategory = null) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId + '-page').classList.add('active');
+            
+            const heroSection = document.getElementById('hero-section');
+            if (pageId === 'home') {
+                heroSection.style.display = 'block';
+            } else {
+                heroSection.style.display = 'none';
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            if (navCategory) {
+                const activeLink = document.querySelector(`.nav-link[data-page="${navCategory}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            } else if (pageId === 'admin') {
+                const adminLink = document.querySelector(`.nav-link[data-page="admin"]`);
+                if(adminLink) adminLink.classList.add('active');
+            }
+
             window.scrollTo(0, 0);
         }
 
         function showAddForm() {
+            currentEditId = null; 
             document.querySelector('form').reset();
-            quillEditor.setContents([]); // 清空排版面板
+            quillEditor.setContents([]); 
+            document.getElementById('form-title-text').textContent = '✍️ 编辑新内容';
+            document.getElementById('save-btn').textContent = '🚀 确认发布到官网';
             document.getElementById('article-form').style.display = 'block';
         }
 
@@ -334,18 +450,18 @@
                 localStorage.setItem('isAdmin', 'true');
                 document.getElementById('login-modal').classList.remove('active');
                 checkLogin();
-                alert('登录成功！已解锁后台管理权限。');
+                switchPage('admin', 'admin'); 
             } else { alert('密码错误'); }
         }
 
         function checkLogin() {
             if (localStorage.getItem('isAdmin') === 'true') {
-                document.getElementById('login-button').innerHTML = `<button class="btn btn-secondary" onclick="localStorage.removeItem('isAdmin'); checkLogin(); switchPage('home');">退出管理</button>`;
+                document.getElementById('login-button').innerHTML = `<button class="btn btn-secondary" onclick="localStorage.removeItem('isAdmin'); checkLogin(); filterAndSwitch('home');">退出管理</button>`;
                 if(!document.querySelector('[data-page="admin"]')) {
-                    document.querySelector('nav ul').insertAdjacentHTML('beforeend', '<li><a href="#" onclick="switchPage(\'admin\')" class="nav-link" data-page="admin" style="color:var(--primary-color);">后台管理</a></li>');
+                    document.querySelector('#nav-menu').insertAdjacentHTML('beforeend', '<li><a href="#" onclick="switchPage(\'admin\', \'admin\')" class="nav-link" data-page="admin" style="font-weight:bold; color:var(--primary-color);">管理后台</a></li>');
                 }
             } else {
-                document.getElementById('login-button').innerHTML = `<button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理员登录</button>`;
+                document.getElementById('login-button').innerHTML = `<button class="btn btn-primary" onclick="document.getElementById('login-modal').classList.add('active')">管理</button>`;
                 const adminNav = document.querySelector('[data-page="admin"]');
                 if(adminNav) adminNav.parentElement.remove();
             }
