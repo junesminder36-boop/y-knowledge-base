@@ -161,8 +161,13 @@
 <body>
     <header>
         <div class="container header-content">
-            <a href="#" class="logo" onclick="switchPage('home')">
-    <img src="./logo.png" alt="优码科技" style="height: 40px; width: auto; max-width: 100%;">
+           <a href="#" class="logo" onclick="switchPage('home')">
+    <img src="./logo.png" alt="优码科技" style="height: 50px; width: auto; flex-shrink: 0; margin-right: 10px;">
+    
+    <div class="logo-text">
+        <h1>优码城市更新智库</h1>
+        <span style="display: block; font-size: 12px; color: var(--text-light); line-height: 1.2;">政策解读 · 行业案例 · 解决方案</span>
+    </div>
 </a>
             <div class="header-right">
                 <div id="login-button"><button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理</button></div>
