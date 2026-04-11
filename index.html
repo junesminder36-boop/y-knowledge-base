@@ -20,7 +20,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; line-height: 1.6; color: var(--text-color); background-color: #f5f7fb; -webkit-font-smoothing: antialiased;}
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; line-height: 1.6; color: var(--text-color); background-color: #f5f7fb; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh;}
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* 头部和导航 */
@@ -59,7 +59,7 @@
         .category-card p { color: var(--text-light); font-size: 14px; line-height: 1.5;}
 
         /* 主体内容 */
-        main { min-height: 60vh; padding-bottom: 60px;}
+        main { flex: 1; padding-bottom: 60px; }
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -83,6 +83,9 @@
         .article-header h2 { font-size: 32px; margin-bottom: 15px; }
         .article-header .meta { display: flex; gap: 20px; color: var(--text-light); margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; flex-wrap: wrap;}
         
+        /* 🚨 修复手机端图片溢出问题 🚨 */
+        .ql-editor img { max-width: 100% !important; height: auto !important; border-radius: 8px; display: block; margin: 10px 0;}
+
         /* 表单 */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-color); }
@@ -97,6 +100,14 @@
         .modal.active { display: flex; }
         .modal-content { background: white; padding: 40px; border-radius: var(--radius); width: 400px; max-width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);}
 
+        /* =========================================
+           ✨ 新增：网页底部信息栏 (Footer)
+           ========================================= */
+        footer { background: white; border-top: 1px solid var(--border-color); padding: 50px 0 20px; margin-top: 40px; }
+        .footer-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 40px; }
+        .footer-col h4 { font-size: 16px; margin-bottom: 15px; color: var(--text-color); font-weight: bold; }
+        .footer-col p { font-size: 14px; color: var(--text-light); margin-bottom: 10px; line-height: 1.6; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 13px; color: #999; }
 
         /* =========================================
            📱 移动端完美适配 (Responsive Mobile CSS)
@@ -104,7 +115,6 @@
         @media (max-width: 768px) {
             .container { padding: 0 15px; }
             
-            /* 导航栏改版：支持手指滑动，按钮右上角 */
             .header-content { padding: 12px 0; }
             .logo { width: calc(100% - 70px); }
             .logo-text h1 { font-size: 18px; }
@@ -115,7 +125,6 @@
             nav ul { width: max-content; gap: 10px; }
             nav a { padding: 6px 12px; font-size: 14px; }
 
-            /* 头图缩放与调整 */
             .hero { padding: 40px 15px; }
             .hero h1 { font-size: 26px; margin-bottom: 15px; letter-spacing: 0;}
             .hero p { font-size: 14px; margin-bottom: 25px; }
@@ -123,21 +132,18 @@
             .search-bar input { padding: 8px 15px; font-size: 14px; }
             .search-bar button { padding: 8px 20px; font-size: 14px; }
 
-            /* 分类卡片变横向排列或单列 */
             .categories-grid { grid-template-columns: 1fr; margin-top: -20px; gap: 15px; }
             .category-card { padding: 20px; display: flex; align-items: center; gap: 15px; }
             .cat-icon { width: 40px; height: 40px; font-size: 20px; margin-bottom: 0; flex-shrink: 0;}
             .category-card h3 { margin-bottom: 5px; font-size: 16px;}
-            .category-card p { display: none; } /* 手机端隐藏繁琐描述 */
+            .category-card p { display: none; } 
 
-            /* 文章列表改为上下大图排版 */
             .article-card-item { flex-direction: column; padding: 15px; gap: 12px;}
             .article-cover { width: 100%; height: 180px; }
             .article-content h3 { font-size: 16px; margin-bottom: 6px; }
             .article-meta { font-size: 12px; gap: 10px;}
             .article-summary { font-size: 13px; }
 
-            /* 文章详情页与表单紧凑化 */
             .article-detail { padding: 20px 15px; margin-top: 20px;}
             .article-header h2 { font-size: 22px; }
             .article-detail-cover { max-height: 250px; margin-bottom: 20px; }
@@ -145,9 +151,12 @@
             .form-row { grid-template-columns: 1fr; gap: 0; }
             #editor-container { height: 300px; }
             
-            /* 后台列表适配手机 */
             #admin-articles .article-card-item { flex-direction: column; align-items: flex-start; }
             #admin-articles .article-card-item > div { margin-bottom: 10px; width: 100%;}
+
+            /* 手机端底部信息栏改为单列左对齐 */
+            .footer-content { grid-template-columns: 1fr; gap: 20px; text-align: left; }
+            footer { padding: 30px 0 15px; margin-top: 20px;}
         }
     </style>
 </head>
@@ -263,6 +272,28 @@
             <div class="articles-list" id="admin-articles"></div>
         </div>
     </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h4>优码城市更新智库</h4>
+                <p>致力于提供最全面的城市更新知识服务，<br>助力城市高质量发展。</p>
+            </div>
+            <div class="footer-col">
+                <h4>联系我们</h4>
+                <p>电话：400-1615-010</p>
+                <p>服务时间：周一至周五 9:00-18:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>关注我们</h4>
+                <p>微信公众号：优码城市更新圈</p>
+                <p>搜索关注获取最新资讯</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 优码城市更新智库. 保留所有权利.</p>
+        </div>
+    </footer>
 
     <div id="login-modal" class="modal">
         <div class="modal-content">
