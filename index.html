@@ -116,11 +116,10 @@
             .container { padding: 0 15px; }
             .header-content { padding: 12px 0; align-items: center;}
             
-            /* ✨ 修复手机端 Logo 拥挤问题 */
             .logo { width: calc(100% - 70px); }
             #main-logo-img { height: 32px !important; margin-right: 8px !important; }
             .logo-text h1 { font-size: 17px; margin-bottom: 0;}
-            .logo-text span { display: none !important; } /* 手机端自动隐藏口号，保持清爽 */
+            .logo-text span { display: none !important; } 
 
             .header-right { width: auto; position: absolute; right: 15px; top: 18px;}
             .header-right .btn { padding: 5px 12px; font-size: 13px; }
@@ -315,7 +314,7 @@
     
     <script>
         // ========================================================
-        // 🚨【非常重要】请务必在这里重新填入你的真实 URL 和 API KEY！
+        // 🚨【非常重要】填入你以 sb_publishable_ 开头的真钥匙！
         // 🚨 务必保留两边的英文单引号！
         // ========================================================
         const SUPABASE_URL = 'https://pmrolepmqmslcrrzfkql.supabase.co'; 
@@ -347,14 +346,12 @@
             await fetchArticles();
         });
 
+        // ✨ V3.7 终极修复：去掉了引发 CORS 拦截的 Header，改用安全的小尾巴防缓存
         async function fetchArticles() {
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { 
-                    headers: {
-                        ...headers,
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
-                    }
-                });
+                // 安全的防缓存方式
+                const url = `${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc&_t=${new Date().getTime()}`;
+                const res = await fetch(url, { headers });
                 
                 if (!res.ok) throw new Error(`数据库拒绝请求 (状态码: ${res.status})，请检查底部的 URL 和 KEY。`);
                 
