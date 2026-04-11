@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>优码城市更新智库 - 政策解读与行业案例</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #4C64FE;
             --primary-dark: #3A4FD9;
-            --primary-light: #6B7DFF;
             --secondary-color: #F8F9FA;
             --text-color: #333333;
             --text-light: #666666;
@@ -18,496 +18,340 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-            line-height: 1.6; color: var(--text-color); background-color: #f5f7fb;
-        }
-
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; line-height: 1.6; color: var(--text-color); background-color: #f5f7fb; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* 头部样式 */
+        /* 头部和导航 */
         header { background: white; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; }
         .header-content { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
         .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .logo-icon { width: 40px; height: 40px; background: var(--primary-color); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; }
         .logo-text h1 { font-size: 24px; color: var(--primary-color); font-weight: 600; }
-        .logo-text p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
-
         nav ul { display: flex; gap: 30px; list-style: none; }
-        nav a { text-decoration: none; color: var(--text-color); font-weight: 500; padding: 8px 16px; border-radius: var(--radius); transition: all 0.3s ease; }
-        nav a:hover, nav a.active { color: var(--primary-color); background-color: rgba(76, 100, 254, 0.1); }
-
+        nav a { text-decoration: none; color: var(--text-color); font-weight: 500; padding: 8px 16px; border-radius: var(--radius); }
+        nav a.active { color: var(--primary-color); background-color: rgba(76, 100, 254, 0.1); }
         .header-right { display: flex; align-items: center; gap: 20px; }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-
-        .btn { padding: 8px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
+        .btn { padding: 8px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-weight: 500; }
         .btn-primary { background: var(--primary-color); color: white; }
-        .btn-secondary { background: var(--secondary-color); color: var(--text-color); }
+        .btn-secondary { background: var(--secondary-color); color: var(--text-color); border: 1px solid var(--border-color); }
         .btn-danger { background: #DC3545; color: white; }
 
-        /* 主内容区 */
-        main { min-height: calc(100vh - 200px); padding: 40px 0; }
+        /* 主体布局 */
+        main { min-height: 80vh; padding: 40px 0; }
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 首页样式 */
-        .hero { text-align: center; padding: 60px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: var(--radius); margin-bottom: 40px; color: white; }
-        .hero h2 { font-size: 2.5rem; margin-bottom: 20px; }
-        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
-        .search-box { max-width: 500px; margin: 0 auto; position: relative; }
-        .search-box input { width: 100%; padding: 16px 20px; border: none; border-radius: 50px; font-size: 16px; box-shadow: var(--shadow); }
-        .search-box button { position: absolute; right: 8px; top: 8px; background: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 25px; cursor: pointer; font-weight: 500; }
-
-        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .category-card { background: white; border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); transition: transform 0.3s ease; cursor: pointer; }
-        .category-card:hover { transform: translateY(-5px); }
-        .category-icon { width: 60px; height: 60px; background: var(--primary-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; font-size: 24px; }
-        .category-card h3 { font-size: 20px; margin-bottom: 10px; }
-        .category-card p { color: var(--text-light); margin-bottom: 20px; }
-        .article-count { color: var(--primary-color); font-weight: 500; }
-
-        /* 文章列表样式 */
+        /* 文章卡片 (增加封面图布局) */
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .page-header h2 { font-size: 28px; }
-        .filter-bar { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .filter-btn { padding: 8px 20px; background: white; border: 1px solid var(--border-color); border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; }
-        .filter-btn:hover, .filter-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
         .articles-list { display: grid; gap: 20px; }
-        .article-card-item { background: white; border-radius: var(--radius); padding: 25px; box-shadow: var(--shadow); display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; cursor: pointer;}
-        .article-card-item:hover { transform: translateY(-2px); transition: 0.2s;}
-        .article-content h3 { font-size: 18px; margin-bottom: 10px; }
-        .article-meta { display: flex; gap: 20px; color: var(--text-light); font-size: 14px; margin-bottom: 10px; }
-        .article-tag { display: inline-block; padding: 4px 12px; background: rgba(76, 100, 254, 0.1); color: var(--primary-color); border-radius: 20px; font-size: 12px; font-weight: 500; }
-        .article-actions { display: flex; gap: 10px; }
+        .article-card-item { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; gap: 20px; align-items: flex-start; cursor: pointer; transition: transform 0.2s;}
+        .article-card-item:hover { transform: translateY(-3px); }
+        .article-cover { width: 160px; height: 110px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--border-color);}
+        .article-content { flex: 1; }
+        .article-content h3 { font-size: 18px; margin-bottom: 8px; color: var(--primary-dark);}
+        .article-meta { display: flex; gap: 15px; color: var(--text-light); font-size: 13px; margin-bottom: 8px; }
+        .article-summary { color: var(--text-color); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .article-tag { display: inline-block; padding: 3px 10px; background: rgba(76,100,254,0.1); color: var(--primary-color); border-radius: 20px; font-size: 12px; margin-top: 10px;}
 
-        /* 文章详情样式 */
+        /* 文章详情 */
         .article-detail { background: white; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); }
-        .article-header { margin-bottom: 30px; }
-        .article-header h2 { font-size: 28px; margin-bottom: 15px; line-height: 1.4; }
-        .article-header .meta { display: flex; gap: 20px; color: var(--text-light); margin-bottom: 20px; }
-        .article-body { line-height: 1.8; white-space: pre-wrap;}
-
-        /* B端管理样式 */
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .article-detail-cover { width: 100%; max-height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 30px; }
+        .article-header h2 { font-size: 32px; margin-bottom: 15px; }
+        .article-header .meta { display: flex; gap: 20px; color: var(--text-light); margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px;}
+        
+        /* 表单与富文本 */
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-control { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: var(--radius); font-size: 16px; }
-        .form-control:focus { outline: none; border-color: var(--primary-color); }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-        /* 模态框样式 */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center; }
+        #editor-container { height: 500px; background: white; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-size: 16px;}
+        .ql-toolbar { border-top-left-radius: 6px; border-top-right-radius: 6px; background: #f8f9fa;}
+        
+        /* 模态框 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: var(--radius); width: 400px; max-width: 90%; padding: 30px; box-shadow: var(--shadow); }
-        .modal-header { text-align: center; margin-bottom: 20px; }
-        .modal-header h2 { color: var(--primary-color); margin-bottom: 10px; }
-        .modal-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
-        .modal-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-bottom: 2px solid transparent; }
-        .modal-tab.active { border-bottom-color: var(--primary-color); color: var(--primary-color); font-weight: 500; }
-        .modal-actions { display: flex; gap: 15px; margin-top: 20px; }
-
-        /* 页脚样式 */
-        footer { background: white; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 60px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-        .copyright { text-align: center; padding-top: 20px; margin-top: 20px; border-top: 1px solid var(--border-color); color: var(--text-light); font-size: 14px; }
-
-        @media (max-width: 768px) {
-            .header-content { flex-direction: column; gap: 20px; }
-            nav ul { flex-wrap: wrap; justify-content: center; }
-            .article-card-item { grid-template-columns: 1fr; }
-        }
+        .modal-content { background: white; padding: 30px; border-radius: var(--radius); width: 400px; }
     </style>
 </head>
 <body>
     <header>
         <div class="container header-content">
-            <a href="#" class="logo" onclick="switchPage('home'); return false;">
+            <a href="#" class="logo" onclick="switchPage('home')">
                 <div class="logo-icon">UR</div>
-                <div class="logo-text">
-                    <h1>优码城市更新智库</h1>
-                    <p>政策解读 · 行业案例 · 解决方案</p>
-                </div>
+                <div class="logo-text"><h1>优码城市智库</h1></div>
             </a>
             <nav>
                 <ul>
-                    <li><a href="#" onclick="switchPage('home'); return false;" class="nav-link active" data-page="home">首页</a></li>
-                    <li><a href="#" onclick="switchPage('policy'); return false;" class="nav-link" data-page="policy">政策解读</a></li>
-                    <li><a href="#" onclick="switchPage('cases'); return false;" class="nav-link" data-page="cases">行业案例</a></li>
-                    <li><a href="#" onclick="switchPage('solutions'); return false;" class="nav-link" data-page="solutions">数字化解决方案</a></li>
+                    <li><a href="#" onclick="switchPage('home')" class="nav-link active" data-page="home">全部文章</a></li>
                 </ul>
             </nav>
             <div class="header-right">
-                <div id="user-info" class="user-info" style="display: none;">
-                    <div class="user-avatar" id="user-avatar">U</div>
-                    <div>
-                        <div id="user-name">用户</div>
-                        <button class="btn btn-secondary" onclick="logout()" style="padding: 4px 12px; font-size: 12px; margin-top: 4px;">退出</button>
-                    </div>
-                </div>
-                <div id="login-button">
-                    <button class="btn btn-primary" onclick="showLoginModal()">管理员登录</button>
-                </div>
+                <div id="login-button"><button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理员登录</button></div>
             </div>
         </div>
     </header>
 
-    <main>
-        <div class="container">
-            <div id="home-page" class="page active">
-                <section class="hero">
-                    <h2>优码城市更新知识库</h2>
-                    <p>汇聚最新政策解读、行业最佳实践案例、数字化解决方案，助力城市更新高质量发展</p>
-                    <div class="search-box">
-                        <input type="text" placeholder="搜索政策、案例、解决方案..." id="search-input">
-                        <button onclick="searchContent()">搜索</button>
+    <main class="container">
+        <div id="home-page" class="page active">
+            <div class="page-header"><h2>最新发布</h2></div>
+            <div class="articles-list" id="home-articles">加载中...</div>
+        </div>
+
+        <div id="article-detail-page" class="page">
+            <button class="btn btn-secondary" onclick="switchPage('home')" style="margin-bottom: 20px;">← 返回列表</button>
+            <div class="article-detail" id="article-detail-content"></div>
+        </div>
+
+        <div id="admin-page" class="page">
+            <div class="page-header">
+                <h2>后台管理控制台</h2>
+                <button class="btn btn-primary" onclick="showAddForm()">+ 发布精美文章</button>
+            </div>
+            
+            <div id="article-form" style="display: none; background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; color: var(--primary-color);">✍️ 编辑新内容</h3>
+                <form onsubmit="saveArticle(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label>文章标题</label><input type="text" class="form-control" id="form-title" required></div>
+                        <div class="form-group">
+                            <label>设置封面图 (可选, 推荐 16:9)</label>
+                            <input type="file" class="form-control" id="form-cover" accept="image/png, image/jpeg, image/gif">
+                        </div>
                     </div>
-                </section>
-                <section class="categories">
-                    <div class="category-card" onclick="switchPage('policy')">
-                        <div class="category-icon">📋</div>
-                        <h3>政策解读</h3>
-                        <div class="article-count" id="policy-count">0篇文章</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>文章分类</label>
+                            <select class="form-control" id="form-category">
+                                <option value="政策解读">政策解读</option>
+                                <option value="行业案例">行业案例</option>
+                                <option value="数字化方案">数字化方案</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>作者 / 来源</label><input type="text" class="form-control" id="form-author" value="优码科技"></div>
                     </div>
-                    <div class="category-card" onclick="switchPage('cases')">
-                        <div class="category-icon">🏗️</div>
-                        <h3>行业案例</h3>
-                        <div class="article-count" id="cases-count">0个案例</div>
+                    <div class="form-group"><label>核心摘要 (用于列表显示)</label><textarea class="form-control" id="form-summary" rows="2" required></textarea></div>
+                    
+                    <div class="form-group">
+                        <label>正文排版区 (支持直接粘贴图片)</label>
+                        <div id="editor-container"></div>
                     </div>
-                    <div class="category-card" onclick="switchPage('solutions')">
-                        <div class="category-icon">💡</div>
-                        <h3>数字化解决方案</h3>
-                        <div class="article-count" id="solutions-count">0个方案</div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary" id="save-btn" style="flex: 1; font-size: 16px; padding: 12px;">🚀 确认发布到官网</button>
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('article-form').style.display='none'">取消</button>
                     </div>
-                </section>
-                <section>
-                    <h2 style="margin-bottom: 20px;">最新内容</h2>
-                    <div class="articles-list" id="latest-articles"></div>
-                </section>
+                </form>
             </div>
-
-            <div id="policy-page" class="page">
-                <div class="page-header"><h2>政策解读</h2></div>
-                <div class="filter-bar">
-                    <button class="filter-btn active" onclick="filterArticles('policy', 'all', this)">全部</button>
-                    <button class="filter-btn" onclick="filterArticles('policy', 'national', this)">国家政策</button>
-                    <button class="filter-btn" onclick="filterArticles('policy', 'local', this)">地方政策</button>
-                </div>
-                <div class="articles-list" id="policy-articles"></div>
-            </div>
-
-            <div id="cases-page" class="page">
-                <div class="page-header"><h2>行业案例</h2></div>
-                <div class="filter-bar">
-                    <button class="filter-btn active" onclick="filterArticles('cases', 'all', this)">全部</button>
-                    <button class="filter-btn" onclick="filterArticles('cases', 'residential', this)">老旧小区改造</button>
-                    <button class="filter-btn" onclick="filterArticles('cases', 'industrial', this)">工业区改造</button>
-                </div>
-                <div class="articles-list" id="cases-articles"></div>
-            </div>
-
-            <div id="solutions-page" class="page">
-                <div class="page-header"><h2>数字化解决方案</h2></div>
-                <div class="filter-bar">
-                    <button class="filter-btn active" onclick="filterArticles('solutions', 'all', this)">全部</button>
-                    <button class="filter-btn" onclick="filterArticles('solutions', 'bim', this)">BIM技术</button>
-                    <button class="filter-btn" onclick="filterArticles('solutions', 'iot', this)">物联网</button>
-                </div>
-                <div class="articles-list" id="solutions-articles"></div>
-            </div>
-
-            <div id="article-detail-page" class="page">
-                <button class="btn btn-secondary" onclick="switchPage('home')" style="margin-bottom: 20px;">← 返回首页</button>
-                <div class="article-detail" id="article-detail-content"></div>
-            </div>
-
-            <div id="admin-page" class="page">
-                <div class="admin-header">
-                    <h2>内容管理后台</h2>
-                    <button class="btn btn-primary" onclick="showAddForm()">+ 发布新文章</button>
-                </div>
-                <div class="articles-list" id="admin-articles"></div>
-
-                <div id="article-form" style="display: none; margin-top: 40px;">
-                    <div class="article-detail">
-                        <h3 id="form-title">新增文章</h3>
-                        <form onsubmit="saveArticle(event)">
-                            <div class="form-row">
-                                <div class="form-group"><label>文章标题</label><input type="text" class="form-control" id="form-title-input" required></div>
-                                <div class="form-group"><label>分类</label>
-                                    <select class="form-control" id="form-category" required>
-                                        <option value="policy">政策解读</option>
-                                        <option value="cases">行业案例</option>
-                                        <option value="solutions">数字化解决方案</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group"><label>子分类标签</label><input type="text" class="form-control" id="form-subcategory" placeholder="例如: 国家政策/老旧小区"></div>
-                                <div class="form-group"><label>作者/来源</label><input type="text" class="form-control" id="form-author"></div>
-                            </div>
-                            <div class="form-group"><label>摘要</label><textarea class="form-control" id="form-summary" rows="2" required></textarea></div>
-                            <div class="form-group"><label>正文内容</label><textarea class="form-control" id="form-content" rows="10" required></textarea></div>
-                            <button type="submit" class="btn btn-primary">确认保存推送</button>
-                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('article-form').style.display='none'">取消</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            
+            <h3>已发布文章管理</h3>
+            <div class="articles-list" id="admin-articles" style="margin-top: 20px;"></div>
         </div>
     </main>
 
-   <div id="login-modal" class="modal">
+    <div id="login-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>管理员登录</h2></div>
-            <div class="form-group">
-                <label>账号</label>
-                <input type="text" class="form-control" id="login-username" placeholder="请输入管理员账号">
-            </div>
-            <div class="form-group">
-                <label>密码</label>
-                <input type="password" class="form-control" id="login-password" placeholder="请输入密码">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="login()" style="flex: 1;">登录后台</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.remove('active')" style="flex: 1;">取消</button>
-            </div>
+            <h2 style="margin-bottom: 20px; text-align: center;">管理员通行证</h2>
+            <div class="form-group"><label>账号</label><input type="text" class="form-control" id="login-username" placeholder="请输入 admin"></div>
+            <div class="form-group"><label>密码</label><input type="password" class="form-control" id="login-password" placeholder="请输入 123456"></div>
+            <button class="btn btn-primary" onclick="login()" style="width: 100%; margin-top: 10px;">登录</button>
         </div>
     </div>
 
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
     <script>
-        // ==========================================
-        // 🚨 请在这里填入你的真实数据库地址和密钥！
-        // ==========================================
-        const SUPABASE_URL = 'https://pmrolepmqmslcrrzfkql.supabase.co'; // 地址已自动填入
-        const SUPABASE_KEY = 'sb_publishable_nCrNvfF6tpmZ16QqUQxFVA_t9kNjwar'; // <--- 替换这里！！！
+        // ========================================================
+        // 🚨【非常重要】请务必在这里重新填入你的真实 URL 和 API KEY！
+        // ========================================================
+        const SUPABASE_URL = 'https://pmrolepmqmslcrrzfkql.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_nCrNvfF6tpmZ16QqUQxFVA_t9kNjwar';
         
-        const headers = {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-        };
+        const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
+        let quillEditor; // 富文本编辑器实例
 
-        // 前端数据缓存
-        let knowledgeBase = { policy: [], cases: [], solutions: [] };
-        let currentUser = null;
-        let editingArticleId = null;
+        // 页面加载完毕初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 初始化 Quill 富文本编辑器
+            quillEditor = new Quill('#editor-container', {
+                theme: 'snow',
+                placeholder: '请在这里开始你的专业排版...（你可以选中文字加粗，或者直接粘贴图片进来）',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }], // 标题大小
+                        ['bold', 'italic', 'underline'],  // 加粗、斜体、下划线
+                        [{ 'color': [] }, { 'background': [] }], // 字体颜色、背景色
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // 列表
+                        ['link', 'image', 'video'], // 链接、图片、视频
+                        ['clean'] // 清除格式
+                    ]
+                }
+            });
 
-        // 页面加载完毕后执行
-        document.addEventListener('DOMContentLoaded', async function() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                updateUserUI();
-            }
-            
-            // 从云端数据库拉取数据
-            await fetchArticlesFromCloud();
+            checkLogin();
+            await fetchArticles();
         });
 
-        // 1. 从 Supabase 拉取所有文章
-        async function fetchArticlesFromCloud() {
+        // 1. 获取文章数据
+        async function fetchArticles() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { method: 'GET', headers: headers });
-                if (!response.ok) throw new Error('网络请求失败');
-                
-                const data = await response.json();
-                
-                // 数据分类缓存
-                knowledgeBase.policy = data.filter(item => item.category === 'policy');
-                knowledgeBase.cases = data.filter(item => item.category === 'cases');
-                knowledgeBase.solutions = data.filter(item => item.category === 'solutions');
-                
-                // 渲染 UI
-                renderAllViews();
-            } catch (error) {
-                console.error('拉取数据失败:', error);
-                // 屏蔽报错弹窗，避免由于密钥没填对导致页面卡死
-            }
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { headers });
+                const articles = await res.json();
+                renderList(articles);
+            } catch (err) { console.error('拉取失败:', err); }
         }
 
-        // 2. 将文章保存到 Supabase (支持新增和编辑)
+        // 2. 渲染文章列表
+        function renderList(articles) {
+            const html = articles.map(a => `
+                <div class="article-card-item" onclick="viewArticle(${a.id}, '${escapeHTML(a.title)}')">
+                    ${a.cover_image ? `<img src="${a.cover_image}" class="article-cover">` : `<div class="article-cover" style="background:#e9ecef; display:flex; align-items:center; justify-content:center; color:#999;">暂无封面</div>`}
+                    <div class="article-content">
+                        <h3>${a.title}</h3>
+                        <div class="article-meta"><span>作者: ${a.author}</span> <span>${a.date}</span></div>
+                        <p class="article-summary">${a.summary}</p>
+                        <span class="article-tag">${a.category}</span>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('home-articles').innerHTML = html || '<p>暂无文章</p>';
+            
+            // 渲染后台管理列表
+            document.getElementById('admin-articles').innerHTML = articles.map(a => `
+                <div class="article-card-item" style="align-items: center;">
+                    <div style="flex:1"><b>${a.title}</b> (${a.date})</div>
+                    <button class="btn btn-danger" onclick="deleteArticle(${a.id})">删除</button>
+                </div>
+            `).join('');
+        }
+
+        // 3. 发布/保存文章 (包含上传封面图逻辑)
         async function saveArticle(event) {
             event.preventDefault();
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.textContent = '上传处理中，请稍候...';
+            saveBtn.disabled = true;
+
+            const fileInput = document.getElementById('form-cover');
+            let uploadedCoverUrl = null;
+
+            // 如果选择了封面图，先上传到 Supabase Storage
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_cover.${fileExt}`; // 生成唯一文件名
+                
+                try {
+                    const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${fileName}`, {
+                        method: 'POST',
+                        headers: { ...headers, 'Content-Type': file.type },
+                        body: file
+                    });
+                    if (uploadRes.ok) {
+                        // 拼接公网可访问的图片地址
+                        uploadedCoverUrl = `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
+                    } else {
+                        alert('封面图上传失败！但文章正文会继续保存。');
+                    }
+                } catch (e) { console.error('图片上传网络错误', e); }
+            }
+
+            // 获取富文本里的所有带排版的 HTML 内容！
+            const richContentHTML = quillEditor.root.innerHTML;
+
             const articleData = {
-                title: document.getElementById('form-title-input').value,
-                category: document.getElementById('form-category').value,
-                subcategory: document.getElementById('form-subcategory').value || '通用',
-                author: document.getElementById('form-author').value || '管理员',
+                title: document.getElementById('form-title').value,
                 summary: document.getElementById('form-summary').value,
-                content: document.getElementById('form-content').value,
-                date: new Date().toISOString().split('T')[0],
-                views: 0
+                category: document.getElementById('form-category').value,
+                author: document.getElementById('form-author').value,
+                content: richContentHTML, // 存入带排版的 HTML
+                cover_image: uploadedCoverUrl, // 存入云端图片链接
+                date: new Date().toISOString().split('T')[0]
             };
 
             try {
-                let response;
-                if (editingArticleId) {
-                    // 编辑模式 (PATCH)
-                    response = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${editingArticleId}`, {
-                        method: 'PATCH', headers: headers, body: JSON.stringify(articleData)
-                    });
-                } else {
-                    // 新增模式 (POST)
-                    response = await fetch(`${SUPABASE_URL}/rest/v1/articles`, {
-                        method: 'POST', headers: headers, body: JSON.stringify(articleData)
-                    });
-                }
-
-                if (response.ok) {
-                    alert('文章保存成功！');
-                    document.getElementById('article-form').style.display = 'none';
-                    await fetchArticlesFromCloud(); // 重新拉取最新数据刷新页面
-                } else {
-                    alert('保存失败，请检查数据库配置');
-                }
-            } catch (error) {
-                alert('网络请求失败，请确保填写了正确的 API 密钥。');
-            }
-        }
-
-        // 3. 从 Supabase 删除文章
-        async function deleteArticle(id) {
-            if (!confirm('确定要永久删除这篇文章吗？')) return;
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, {
-                    method: 'DELETE', headers: headers
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles`, {
+                    method: 'POST',
+                    headers: { ...headers, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(articleData)
                 });
-                if (response.ok) {
-                    alert('删除成功');
-                    await fetchArticlesFromCloud();
+                
+                if (res.ok) {
+                    alert('🎉 文章发布成功！');
+                    document.getElementById('article-form').style.display = 'none';
+                    await fetchArticles(); // 刷新列表
                 }
-            } catch (error) {
-                alert('删除失败');
-            }
+            } catch (err) { alert('发布失败请检查网络'); }
+            
+            saveBtn.textContent = '🚀 确认发布到官网';
+            saveBtn.disabled = false;
         }
 
-        // --- 视图渲染与页面切换逻辑 ---
-        function renderAllViews() {
-            document.getElementById('policy-count').textContent = `${knowledgeBase.policy.length}篇文章`;
-            document.getElementById('cases-count').textContent = `${knowledgeBase.cases.length}个案例`;
-            document.getElementById('solutions-count').textContent = `${knowledgeBase.solutions.length}个方案`;
-            
-            const allArticles = [...knowledgeBase.policy, ...knowledgeBase.cases, ...knowledgeBase.solutions].slice(0, 5);
-            document.getElementById('latest-articles').innerHTML = generateArticleListHTML(allArticles);
-            
-            document.getElementById('policy-articles').innerHTML = generateArticleListHTML(knowledgeBase.policy);
-            document.getElementById('cases-articles').innerHTML = generateArticleListHTML(knowledgeBase.cases);
-            document.getElementById('solutions-articles').innerHTML = generateArticleListHTML(knowledgeBase.solutions);
-            
-            if (currentUser && currentUser.role === 'admin') {
-                renderAdminTable();
-            }
+        // 4. 查看文章详情
+        async function viewArticle(id, title) {
+            try {
+                // 单独去数据库拉取这篇文章的完整内容
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, { headers });
+                const data = await res.json();
+                if (data.length > 0) {
+                    const a = data[0];
+                    const coverHtml = a.cover_image ? `<img src="${a.cover_image}" class="article-detail-cover">` : '';
+                    
+                    document.getElementById('article-detail-content').innerHTML = `
+                        <div class="article-header">
+                            <h2>${a.title}</h2>
+                            <div class="meta"><span>${a.author}</span> <span>${a.date}</span> <span>来源: ${a.category}</span></div>
+                        </div>
+                        ${coverHtml}
+                        <div class="ql-editor" style="padding: 0; font-size: 16px;">${a.content}</div>
+                    `;
+                    switchPage('article-detail');
+                }
+            } catch (err) { console.error(err); }
         }
 
-        function generateArticleListHTML(articles) {
-            if(articles.length === 0) return '<p style="color:#999; padding:20px;">暂无内容，请在管理后台发布。</p>';
-            return articles.map(a => `
-                <div class="article-card-item" onclick="viewArticle(${a.id})">
-                    <div class="article-content">
-                        <h3>${a.title}</h3>
-                        <div class="article-meta"><span>${a.author}</span><span>${a.date}</span></div>
-                        <p>${a.summary}</p>
-                        <span class="article-tag">${a.subcategory}</span>
-                    </div>
-                    <button class="btn btn-primary">查看</button>
-                </div>
-            `).join('');
+        // 5. 删除文章
+        async function deleteArticle(id) {
+            if(!confirm('确定永久删除吗？')) return;
+            await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, { method: 'DELETE', headers });
+            fetchArticles();
         }
 
-        function viewArticle(id) {
-            const allArticles = [...knowledgeBase.policy, ...knowledgeBase.cases, ...knowledgeBase.solutions];
-            const article = allArticles.find(a => a.id == id);
-            if (!article) return;
-            
-            document.getElementById('article-detail-content').innerHTML = `
-                <div class="article-header">
-                    <h2>${article.title}</h2>
-                    <div class="meta"><span>${article.author}</span><span>${article.date}</span><span>阅读量: ${article.views || 0}</span></div>
-                </div>
-                <div class="article-body">${article.content}</div>
-            `;
-            switchPage('article-detail');
-            
-            // 可选：增加浏览量 API (由于是 0 成本，可以暂时不做复杂的浏览量递增以节省请求)
-        }
-
+        // 辅助功能：页面切换与登录
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId + '-page').classList.add('active');
-            
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
-            if (activeLink) activeLink.classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        // --- 简单的用户与后台逻辑 ---
-        function showLoginModal() { document.getElementById('login-modal').classList.add('active'); }
-        
-        function login() {
-            const u = document.getElementById('login-username').value;
-            const p = document.getElementById('login-password').value;
-            if (u === 'admin' && p === '123456') { // 写死的简易验证
-                currentUser = { username: 'Admin', role: 'admin' };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateUserUI();
-                document.getElementById('login-modal').classList.remove('active');
-                alert('登录成功！导航栏已出现"后台管理"按钮。');
-                renderAdminTable();
-            } else {
-                alert('账号或密码错误 (测试账号 admin / 123456)');
-            }
-        }
-        
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateUserUI();
-            switchPage('home');
+        function showAddForm() {
+            document.querySelector('form').reset();
+            quillEditor.setContents([]); // 清空排版面板
+            document.getElementById('article-form').style.display = 'block';
         }
 
-        function updateUserUI() {
-            if (currentUser) {
-                document.getElementById('login-button').style.display = 'none';
-                document.getElementById('user-info').style.display = 'flex';
-                // 添加后台导航
-                if(!document.querySelector('.nav-link[data-page="admin"]')){
-                    document.querySelector('nav ul').insertAdjacentHTML('beforeend', '<li><a href="#" onclick="switchPage(\'admin\'); return false;" class="nav-link" data-page="admin" style="color:var(--primary-color); font-weight:bold;">后台管理</a></li>');
+        function login() {
+            if (document.getElementById('login-username').value === 'admin' && document.getElementById('login-password').value === '123456') {
+                localStorage.setItem('isAdmin', 'true');
+                document.getElementById('login-modal').classList.remove('active');
+                checkLogin();
+                alert('登录成功！已解锁后台管理权限。');
+            } else { alert('密码错误'); }
+        }
+
+        function checkLogin() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                document.getElementById('login-button').innerHTML = `<button class="btn btn-secondary" onclick="localStorage.removeItem('isAdmin'); checkLogin(); switchPage('home');">退出管理</button>`;
+                if(!document.querySelector('[data-page="admin"]')) {
+                    document.querySelector('nav ul').insertAdjacentHTML('beforeend', '<li><a href="#" onclick="switchPage(\'admin\')" class="nav-link" data-page="admin" style="color:var(--primary-color);">后台管理</a></li>');
                 }
             } else {
-                document.getElementById('login-button').style.display = 'block';
-                document.getElementById('user-info').style.display = 'none';
-                const adminNav = document.querySelector('.nav-link[data-page="admin"]');
-                if (adminNav) adminNav.parentElement.remove();
+                document.getElementById('login-button').innerHTML = `<button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理员登录</button>`;
+                const adminNav = document.querySelector('[data-page="admin"]');
+                if(adminNav) adminNav.parentElement.remove();
             }
         }
-
-        function renderAdminTable() {
-            const allArticles = [...knowledgeBase.policy, ...knowledgeBase.cases, ...knowledgeBase.solutions];
-            document.getElementById('admin-articles').innerHTML = allArticles.map(a => `
-                <div class="article-card-item">
-                    <div class="article-content">
-                        <h3>${a.title}</h3>
-                        <span class="article-tag">${a.category}</span>
-                    </div>
-                    <div class="article-actions">
-                        <button class="btn btn-danger" onclick="deleteArticle(${a.id})">删除</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function showAddForm() {
-            editingArticleId = null;
-            document.getElementById('form-title').textContent = '发布新文章';
-            document.querySelector('form').reset();
-            document.getElementById('article-form').style.display = 'block';
-            document.getElementById('article-form').scrollIntoView({behavior: 'smooth'});
-        }
+        
+        function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
     </script>
 </body>
 </html>
