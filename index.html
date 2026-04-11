@@ -27,7 +27,7 @@
         header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .header-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; flex-wrap: wrap;}
         .logo { text-decoration: none; display: flex; align-items: center; gap: 10px;}
-        .logo-text h1 { font-size: 22px; color: var(--primary-color); font-weight: bold; margin-bottom: 2px;}
+        .logo-text h1 { font-size: 22px; color: var(--primary-color); font-weight: bold; margin-bottom: 2px; line-height: 1.2;}
         .logo-text span { font-size: 12px; color: var(--text-light); }
         
         nav ul { display: flex; gap: 30px; list-style: none; }
@@ -64,7 +64,7 @@
         .page.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 文章列表布局对齐 */
+        /* 文章列表 */
         .page-header { display: flex; justify-content: flex-start; align-items: center; margin-bottom: 25px; }
         .page-header h2 { margin: 0; color: var(--primary-color); }
         .page-header .btn { margin-left: auto; } 
@@ -114,13 +114,18 @@
            ========================================= */
         @media (max-width: 768px) {
             .container { padding: 0 15px; }
-            .header-content { padding: 12px 0; }
+            .header-content { padding: 12px 0; align-items: center;}
+            
+            /* ✨ 修复手机端 Logo 拥挤问题 */
             .logo { width: calc(100% - 70px); }
-            .logo-text h1 { font-size: 18px; }
+            #main-logo-img { height: 32px !important; margin-right: 8px !important; }
+            .logo-text h1 { font-size: 17px; margin-bottom: 0;}
+            .logo-text span { display: none !important; } /* 手机端自动隐藏口号，保持清爽 */
+
             .header-right { width: auto; position: absolute; right: 15px; top: 18px;}
             .header-right .btn { padding: 5px 12px; font-size: 13px; }
             
-            nav { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; padding-bottom: 5px;}
+            nav { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; padding-bottom: 5px;}
             nav ul { width: max-content; gap: 10px; }
             nav a { padding: 6px 12px; font-size: 14px; }
 
@@ -161,14 +166,14 @@
 <body>
     <header>
         <div class="container header-content">
-           <a href="#" class="logo" onclick="switchPage('home')">
-    <img src="./logo.png" alt="优码科技" style="height: 50px; width: auto; flex-shrink: 0; margin-right: 10px;">
-    
-    <div class="logo-text">
-        <h1>优码城市更新智库</h1>
-        <span style="display: block; font-size: 12px; color: var(--text-light); line-height: 1.2;">政策解读 · 行业案例 · 解决方案</span>
-    </div>
-</a>
+            <a href="#" class="logo" onclick="switchPage('home')">
+                <img id="main-logo-img" src="./logo.png" alt="优码科技" style="height: 45px; width: auto; flex-shrink: 0; margin-right: 12px;">
+                <div class="logo-text">
+                    <h1>优码城市更新智库</h1>
+                    <span style="display: block; font-size: 12px; color: var(--text-light); line-height: 1.2;">政策解读 · 行业案例 · 解决方案</span>
+                </div>
+            </a>
+            
             <div class="header-right">
                 <div id="login-button"><button class="btn btn-secondary" onclick="document.getElementById('login-modal').classList.add('active')">管理</button></div>
             </div>
@@ -311,6 +316,7 @@
     <script>
         // ========================================================
         // 🚨【非常重要】请务必在这里重新填入你的真实 URL 和 API KEY！
+        // 🚨 务必保留两边的英文单引号！
         // ========================================================
         const SUPABASE_URL = 'https://pmrolepmqmslcrrzfkql.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_nCrNvfF6tpmZ16QqUQxFVA_t9kNjwar';
@@ -341,7 +347,6 @@
             await fetchArticles();
         });
 
-        // ✨ 修复：去掉了非法的 _t 参数，改用更安全的 Headers 防缓存机制
         async function fetchArticles() {
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`, { 
