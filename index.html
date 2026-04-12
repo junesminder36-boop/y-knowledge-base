@@ -81,7 +81,7 @@
         .article-summary { color: var(--text-light); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6;}
         .article-tag { display: inline-block; padding: 4px 12px; background: rgba(76,148,254,0.1); color: var(--primary-color); border-radius: 20px; font-size: 12px; margin-top: 12px; align-self: flex-start;}
 
-        /* ✨ 分页器样式 */
+        /* 分页器样式 */
         .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--border-color); }
         .pagination .btn { padding: 6px 16px; font-size: 14px; background: white; border: 1px solid var(--primary-color); color: var(--primary-color); box-shadow: none;}
         .pagination .btn:hover:not(:disabled) { background: var(--primary-color); color: white; }
@@ -341,10 +341,9 @@
         let currentEditId = null; 
         let allArticlesData = [];
         
-        // ✨ 分页引擎核心变量
         let currentDisplayData = []; 
         let currentPage = 1;
-        const ITEMS_PER_PAGE = 5; // 这里控制每页展示几个！
+        const ITEMS_PER_PAGE = 5; 
 
         document.addEventListener('DOMContentLoaded', async () => {
             quillEditor = new Quill('#editor-container', {
@@ -366,13 +365,14 @@
             await fetchArticles();
         });
 
+        // ✨ V4.1 终极稳妥版网络请求
         async function fetchArticles() {
             const listContainer = document.getElementById('home-articles');
             const slowTimer = setTimeout(() => {
                 if (listContainer.innerHTML.includes('努力加载')) {
                     listContainer.innerHTML = `
                         <div style="text-align: center; padding: 40px;">
-                            <p style="color: #f59e0b; font-size: 16px; margin-bottom: 10px;">⏳ 首次连接海外服务器较慢，请耐心等待...</p>
+                            <p style="color: #f59e0b; font-size: 16px; margin-bottom: 10px;">⏳ 网络连接稍慢，请耐心等待...</p>
                         </div>
                     `;
                 }
@@ -380,16 +380,21 @@
 
             try {
                 const url = `${SUPABASE_URL}/rest/v1/articles?select=*&order=id.desc`;
-                const res = await fetch(url, { headers: headers, cache: 'no-store' });
+                // 使用最兼容、最不会被老旧手机拦截的请求头
+                const res = await fetch(url, { 
+                    method: 'GET',
+                    headers: {
+                        ...headers,
+                        'Cache-Control': 'no-cache, no-store'
+                    }
+                });
+                
                 clearTimeout(slowTimer); 
                 
                 if (!res.ok) throw new Error(`数据库拒绝请求 (状态码: ${res.status})`);
                 
                 allArticlesData = await res.json();
-                
-                // 后台管理永远显示全部，方便管理
                 renderAdminList();
-                // 首页调用带分页的渲染
                 renderList(allArticlesData, 1);
             } catch (err) { 
                 clearTimeout(slowTimer);
@@ -402,7 +407,6 @@
             }
         }
 
-        // ✨ 专属于管理后台的渲染（不分页）
         function renderAdminList() {
             document.getElementById('admin-articles').innerHTML = allArticlesData.map(a => `
                 <div class="article-card-item" style="align-items: center; padding: 15px; flex-direction: row;">
@@ -415,7 +419,6 @@
             `).join('');
         }
 
-        // ✨ 升级后的分页渲染器
         function renderList(articles, page = 1) {
             currentDisplayData = articles; 
             currentPage = page;
@@ -426,13 +429,11 @@
                 return;
             }
 
-            // 计算分页数据
             const totalPages = Math.ceil(articles.length / ITEMS_PER_PAGE);
             const startIndex = (page - 1) * ITEMS_PER_PAGE;
             const endIndex = startIndex + ITEMS_PER_PAGE;
             const paginatedArticles = articles.slice(startIndex, endIndex);
 
-            // 渲染列表内容
             let html = paginatedArticles.map(a => `
                 <div class="article-card-item" onclick="viewArticle(${a.id}, '${escapeHTML(a.title)}')">
                     ${a.cover_image ? `<img src="${a.cover_image}" class="article-cover">` : `<div class="article-cover" style="background:#e9ecef; display:flex; align-items:center; justify-content:center; color:#999;">暂无封面</div>`}
@@ -445,7 +446,6 @@
                 </div>
             `).join('');
 
-            // ✨ 如果总页数大于1，拼接底部翻页按钮
             if (totalPages > 1) {
                 html += `
                 <div class="pagination">
@@ -459,14 +459,12 @@
             listContainer.innerHTML = html;
         }
 
-        // ✨ 翻页触发器
         function changePage(delta) {
             const newPage = currentPage + delta;
             const totalPages = Math.ceil(currentDisplayData.length / ITEMS_PER_PAGE);
             
             if (newPage >= 1 && newPage <= totalPages) {
                 renderList(currentDisplayData, newPage);
-                // 翻页后，自动平滑滚回到列表的标题处，提升用户体验
                 setTimeout(() => {
                     document.getElementById('list-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
@@ -477,11 +475,11 @@
             document.getElementById('search-input').value = ''; 
             if (category === 'home') {
                 document.getElementById('list-title').textContent = '最新发布';
-                renderList(allArticlesData, 1); // 切换分类时重置回第1页
+                renderList(allArticlesData, 1); 
             } else {
                 document.getElementById('list-title').textContent = `分类：${category}`;
                 const filtered = allArticlesData.filter(a => a.category === category);
-                renderList(filtered, 1); // 切换分类时重置回第1页
+                renderList(filtered, 1); 
             }
             switchPage('home', category);
         }
@@ -497,7 +495,7 @@
                 a.title.toLowerCase().includes(keyword) || 
                 (a.summary && a.summary.toLowerCase().includes(keyword))
             );
-            renderList(filtered, 1); // 搜索时重置回第1页
+            renderList(filtered, 1); 
             switchPage('home', 'home'); 
         }
 
